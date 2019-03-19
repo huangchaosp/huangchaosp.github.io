@@ -347,7 +347,7 @@
                 
               
 
-              <time title="创建时间：2019-03-19 22:03:15 / 修改时间：22:07:20" itemprop="dateCreated datePublished" datetime="2019-03-19T22:03:15+08:00">2019-03-19</time>
+              <time title="创建时间：2019-03-19 22:03:15 / 修改时间：22:11:50" itemprop="dateCreated datePublished" datetime="2019-03-19T22:03:15+08:00">2019-03-19</time>
             
 
             
@@ -539,7 +539,8 @@
 <h3 id="分组绘图-FacetGrid"><a href="#分组绘图-FacetGrid" class="headerlink" title="分组绘图 FacetGrid"></a>分组绘图 FacetGrid</h3><p>如何在一幅图上体现多个维度：比如通过颜色</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g = sns.FacetGrid(ds, hue=<span class="string">'color'</span>, size=<span class="number">7.5</span>)</span><br><span class="line">g.map(plt.scatter, <span class="string">'carat'</span>, <span class="string">'price'</span>).add_legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190319220110.png" alt=""></p>
-<h3 id="箱线图-boxplot"><a href="#箱线图-boxplot" class="headerlink" title="箱线图 boxplot"></a>箱线图 boxplot</h3><h3 id="使用箱线图查看不同色泽的钻石价格的分布情况"><a href="#使用箱线图查看不同色泽的钻石价格的分布情况" class="headerlink" title="使用箱线图查看不同色泽的钻石价格的分布情况"></a>使用箱线图查看不同色泽的钻石价格的分布情况</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.boxplot(x=<span class="string">"color"</span>, y=<span class="string">"price"</span>, data=ds) </span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="箱线图-boxplot"><a href="#箱线图-boxplot" class="headerlink" title="箱线图 boxplot"></a>箱线图 boxplot</h3><p>使用箱线图查看不同色泽的钻石价格的分布情况</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.boxplot(x=<span class="string">"color"</span>, y=<span class="string">"price"</span>, data=ds) </span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190319220119.png" alt=""></p>
 <h3 id="计数条形图-countplot"><a href="#计数条形图-countplot" class="headerlink" title="计数条形图 countplot"></a>计数条形图 countplot</h3><p>通过countplot 我可以看出那个色泽的钻石个数最多</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.countplot(x=<span class="string">'color'</span>,data=ds)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
