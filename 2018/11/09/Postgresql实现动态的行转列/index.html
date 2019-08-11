@@ -109,13 +109,14 @@
 
 
   <meta name="description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
+<meta name="keywords" content="SQL,Postgresql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Postgresql实现动态的行转列">
 <meta property="og:url" content="http://yoursite.com/2018/11/09/Postgresql实现动态的行转列/index.html">
 <meta property="og:site_name" content="Huang Chao">
 <meta property="og:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-24T12:09:30.000Z">
+<meta property="og:updated_time" content="2019-08-11T05:42:31.635Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Postgresql实现动态的行转列">
 <meta name="twitter:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
@@ -355,7 +356,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-24 20:09:30" itemprop="dateModified" datetime="2019-03-24T20:09:30+08:00">2019-03-24</time>
+                <time title="修改时间：2019-08-11 13:42:31" itemprop="dateModified" datetime="2019-08-11T13:42:31+08:00">2019-08-11</time>
               
             
           </span>
@@ -581,6 +582,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+            <a href="/tags/Postgresql/" rel="tag"># Postgresql</a>
+          
+        </div>
+      
 
       
       
@@ -695,7 +704,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -712,7 +723,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
