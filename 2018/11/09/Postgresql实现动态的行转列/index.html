@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
+<meta name="keywords" content="SQL,Postgresql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Postgresql实现动态的行转列">
+<meta property="og:url" content="http://yoursite.com/2018/11/09/Postgresql实现动态的行转列/index.html">
+<meta property="og:site_name" content="Huang Chao">
+<meta property="og:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-11T05:42:31.635Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Postgresql实现动态的行转列">
+<meta name="twitter:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80    当">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/09/Postgresql实现动态的行转列/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Postgresql实现动态的行转列 | Huang Chao</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Huang Chao</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/09/Postgresql实现动态的行转列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Huang Chao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Huang Chao">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Postgresql实现动态的行转列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-09 14:23:15" itemprop="dateCreated datePublished" datetime="2018-11-09T14:23:15+08:00">2018-11-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-11 13:42:31" itemprop="dateModified" datetime="2019-08-11T13:42:31+08:00">2019-08-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/09/Postgresql实现动态的行转列/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/09/Postgresql实现动态的行转列/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/09/Postgresql实现动态的行转列/" class="leancloud_visitors" data-flag-title="Postgresql实现动态的行转列">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">22k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">20 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在数据处理中，常遇到行转列的问题，比如有如下的问题：<br>有这样的一张表<br><strong>“Student_score”表：</strong></p>
+<table>
+<thead>
+<tr>
+<th>姓名</th>
+<th>课程</th>
+<th>分数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>数学</td>
+<td>83</td>
+</tr>
+<tr>
+<td>张三</td>
+<td>物理</td>
+<td>93</td>
+</tr>
+<tr>
+<td>张三</td>
+<td>语文</td>
+<td>80</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>语文</td>
+<td>74</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>数学</td>
+<td>84</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>物理</td>
+<td>94</td>
+</tr>
+</tbody>
+</table>
+<p>我们想要得到像这样的一张表：</p>
+<table>
+<thead>
+<tr>
+<th>姓名</th>
+<th>数学</th>
+<th>物理</th>
+<th>语文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>李四</td>
+<td>84</td>
+<td>94</td>
+<td>74</td>
+</tr>
+<tr>
+<td>张三</td>
+<td>83</td>
+<td>93</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+<p>当数据量比较少时，我们可以在<code>Excel</code>中使用数据透视表<code>pivot table</code>的功能实现这个需求，但当数据量较大，或者我们还需要在数据库中进行后续的数据处理时，使用数据透视表就显得不那么高效。<br>下面，介绍如何在<code>Postgresql</code>中实现数据的行转列。</p>
+<h2 id="静态写法"><a href="#静态写法" class="headerlink" title="静态写法"></a>静态写法</h2><p>当我们要转换的值字段是<strong>数值型</strong>时，我们可以用<code>SUM()</code>函数：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> Student_score(姓名 <span class="built_in">varchar</span>, 课程 <span class="built_in">varchar</span>, 分数 <span class="built_in">int</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'数学'</span>,<span class="number">83</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'物理'</span>,<span class="number">93</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'语文'</span>,<span class="number">80</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'语文'</span>,<span class="number">74</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'数学'</span>,<span class="number">84</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'物理'</span>,<span class="number">94</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> 姓名</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 数学</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'物理'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 物理</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 语文</span><br><span class="line"><span class="keyword">from</span> Student_score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>当我们要转换的值字段是<strong>字符型</strong>时，比如我们的表是这样的：<br><strong>“Student_grade”表：</strong></p>
+<table>
+<thead>
+<tr>
+<th>姓名</th>
+<th>数学</th>
+<th>物理</th>
+<th>语文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>张三</td>
+<td>优</td>
+<td>良</td>
+<td>及格</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>良</td>
+<td>优</td>
+<td>及格</td>
+</tr>
+</tbody>
+</table>
+<p>我们可以用<code>string_agg()</code>函数：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> Student_grade(姓名 <span class="built_in">varchar</span>, 课程 <span class="built_in">varchar</span>, 等级 <span class="built_in">varchar</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'数学'</span>,<span class="string">'优'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'物理'</span>,<span class="string">'良'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'语文'</span>,<span class="string">'及格'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'语文'</span>,<span class="string">'及格'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'数学'</span>,<span class="string">'良'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'物理'</span>,<span class="string">'优'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> 姓名</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 数学</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'物理'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 物理</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 语文</span><br><span class="line"><span class="keyword">from</span> Student_grade</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><p><code>Postgresql</code>内置了<a href="https://www.postgresql.org/docs/9.2/static/tablefunc.html" target="_blank" rel="noopener">tablefunc</a>可实现<code>pivot table</code>的功能。<br>语法：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> crosstab(</span><br><span class="line">  <span class="string">'select row_name,cat,value</span></span><br><span class="line"><span class="string">   from table</span></span><br><span class="line"><span class="string">   order by 1,2'</span>)</span><br><span class="line"><span class="keyword">AS</span> (row_name <span class="keyword">type</span>, category_1 <span class="keyword">type</span>, category_2 <span class="keyword">type</span>, category_3 <span class="keyword">type</span>, ...);</span><br></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> crosstab(</span><br><span class="line">  <span class="string">'select 姓名,课程,分数</span></span><br><span class="line"><span class="string">   from Student_score</span></span><br><span class="line"><span class="string">   order by 1,2'</span>)</span><br><span class="line"><span class="keyword">AS</span> (姓名 <span class="built_in">varchar</span>, 数学 <span class="built_in">int</span>, 物理 <span class="built_in">int</span>, 语文 <span class="built_in">int</span>);</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是<code>crosstab( text sql)</code> 中的<code>sql</code>语句必须按顺序返回<code>row_name</code>, <code>category</code> , <code>value</code>，并且必须声明输出的各列的列名和数据类型。当原表中的<code>cat</code>列有很多不同的值，那我们将会得到一个有很多列的表，并且我们需要手动声明每个列的<strong>列名</strong>及<strong>数据类型</strong>，显然这种体验非常不友好。那有没有更好的方式呢，我们可以通过手动建立存储过程（函数）实现。</p>
+<h2 id="自建函数（动态）"><a href="#自建函数（动态）" class="headerlink" title="自建函数（动态）"></a>自建函数（动态）</h2><p>动态的行转列我们通过<code>plpgsql</code>实现，思路如下：</p>
+<ol>
+<li>判断<code>value</code>字段的数据类型，如果是数值型，则转入<code>2.</code>，否则转入<code>3.</code></li>
+<li>对<code>cat</code>列中的每个<code>distinct</code>值使用<code>sum(case when)</code>，转成列</li>
+<li>对<code>cat</code>列中的每个<code>distinct</code>值使用<code>string_agg(case when)</code>，转成列</li>
+</ol>
+<p>实现代码示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">or</span> <span class="keyword">REPLACE</span> <span class="keyword">FUNCTION</span> </span><br><span class="line">long_to_wide(</span><br><span class="line">table_name <span class="built_in">VARCHAR</span>,</span><br><span class="line">row_name <span class="built_in">VARCHAR</span>,</span><br><span class="line">cat <span class="built_in">VARCHAR</span>,</span><br><span class="line">value_field <span class="built_in">VARCHAR</span>)</span><br><span class="line"><span class="keyword">returns</span> <span class="built_in">void</span> <span class="keyword">as</span></span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">table_name : 表名</span></span><br><span class="line"><span class="comment">row_name : 行名字段</span></span><br><span class="line"><span class="comment">cat : 转换为列名的字段</span></span><br><span class="line"><span class="comment">value_field : 转换为值的字段</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">DECLARE</span> v_sql <span class="built_in">text</span>;</span><br><span class="line">arow record;</span><br><span class="line">value_type VARCHAR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	</span><br><span class="line">	v_sql=<span class="string">'</span></span><br><span class="line"><span class="string">	drop table if exists temp_table;</span></span><br><span class="line"><span class="string">	CREATE TABLE temp_table as </span></span><br><span class="line"><span class="string">	SELECT distinct '</span>||cat||<span class="string">' as col from  '</span>||table_name||<span class="string">'</span></span><br><span class="line"><span class="string">	order by '</span>||cat;</span><br><span class="line">	<span class="keyword">execute</span> v_sql;</span><br><span class="line"></span><br><span class="line">	v_sql='</span><br><span class="line">	<span class="keyword">SELECT</span> t.typname <span class="keyword">AS</span> <span class="keyword">type</span></span><br><span class="line">	<span class="keyword">FROM</span> pg_class c</span><br><span class="line">	,pg_attribute a</span><br><span class="line">	,pg_type t  </span><br><span class="line">	<span class="keyword">WHERE</span> c.relname = <span class="keyword">lower</span>(<span class="string">'''||table_name||'''</span>) </span><br><span class="line">	<span class="keyword">and</span> a.attnum &gt; <span class="number">0</span> </span><br><span class="line">	<span class="keyword">and</span> a.attrelid = c.oid </span><br><span class="line">	<span class="keyword">and</span> a.atttypid = t.oid  </span><br><span class="line">	<span class="keyword">and</span> a.attname=<span class="string">'''||value_field||'''</span></span><br><span class="line">	<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.attnum</span><br><span class="line">	<span class="string">'; </span></span><br><span class="line"><span class="string">	execute v_sql into value_type;--获取值字段的数据类型</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">	v_sql='</span><span class="keyword">select</span> <span class="string">'||row_name;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	IF value_type in ('</span><span class="built_in">numeric</span><span class="string">','</span><span class="built_in">int8</span><span class="string">','</span>int4<span class="string">','</span><span class="built_in">int</span><span class="string">')--判断值字段是否是数值型 </span></span><br><span class="line"><span class="string">		THEN	</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		FOR arow in (SELECT col FROM temp_table) loop</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		v_sql=v_sql||'</span></span><br><span class="line">				,<span class="keyword">sum</span>(<span class="keyword">case</span> <span class="string">'||cat||'</span> <span class="keyword">when</span> <span class="string">'''||arow.col||'''</span> <span class="keyword">then</span> <span class="string">'||value_field||'</span> <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">end</span>) <span class="string">'||cat||'</span>_<span class="string">'||arow.col;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		end loop;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	ELSE </span></span><br><span class="line"><span class="string">		FOR arow in (SELECT col FROM temp_table) loop</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">		v_sql=v_sql||'</span></span><br><span class="line">		,string_agg((<span class="keyword">case</span> <span class="string">'||cat||'</span> <span class="keyword">when</span> <span class="string">'''||arow.col||'''</span> <span class="keyword">then</span> <span class="string">'||value_field||'</span> <span class="keyword">else</span> <span class="string">''''</span> <span class="keyword">end</span>),<span class="string">''''</span>) <span class="string">'||cat||'</span>_<span class="string">'||arow.col;</span></span><br><span class="line"><span class="string">		end loop;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	END IF;</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">	v_sql='</span></span><br><span class="line">				<span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> <span class="string">'||table_name||'</span>_wide;</span><br><span class="line">				<span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">'||table_name||'</span>_wide <span class="keyword">as</span> </span><br><span class="line">				<span class="string">'||v_sql||'</span> </span><br><span class="line">				<span class="keyword">from</span> <span class="string">'||table_name||'</span> </span><br><span class="line">				<span class="keyword">group</span> <span class="keyword">by</span> <span class="string">'||row_name||'</span>;</span><br><span class="line">				<span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> temp_table</span><br><span class="line">				<span class="string">';</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">	execute v_sql;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">end;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$$ LANGUAGE plpgsql;</span></span><br></pre></td></tr></table></figure></p>
+<p>调用示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> long_to_wide(<span class="string">'Student_grade'</span>, <span class="string">'姓名'</span>,<span class="string">'课程'</span>, <span class="string">'等级'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>生成的表名为<code>Student_grade_wide</code></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+            <a href="/tags/Postgresql/" rel="tag"># Postgresql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/09/SQL知识点总结/" rel="prev" title="SQL知识点总结">
+                SQL知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Huang Chao</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态写法"><span class="nav-number">2.</span> <span class="nav-text">静态写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">3.</span> <span class="nav-text">内置函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自建函数（动态）"><span class="nav-number">4.</span> <span class="nav-text">自建函数（动态）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Chao</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">18k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">17 分钟</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://Huang Chao.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/11/09/Postgresql实现动态的行转列/';
+        this.page.identifier = '2018/11/09/Postgresql实现动态的行转列/';
+        this.page.title = 'Postgresql实现动态的行转列';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Huang Chao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "cYm70x4WBkbYDupwbHjjP22a-MdYXbMMI")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "cYm70x4WBkbYDupwbHjjP22a-MdYXbMMI",
+                'X-LC-Key': "exSfbguCKNijTyKd3U63fnXF",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
