@@ -63,7 +63,7 @@
 <meta property="og:site_name" content="Huang Chao&#39;s Blog">
 <meta property="og:description" content="传统的数据结构与算法中的算法一般定义是$^{1}$： 非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。 我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-17T14:34:36.944Z">
+<meta property="og:updated_time" content="2019-09-22T14:46:36.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="试谈传统算法与机器学习算法">
 <meta name="twitter:description" content="传统的数据结构与算法中的算法一般定义是$^{1}$： 非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。 我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。">
@@ -249,11 +249,19 @@
                 
               
 
-              <time title="创建时间：2019-09-17 22:15:15 / 修改时间：22:34:36" itemprop="dateCreated datePublished" datetime="2019-09-17T22:15:15+08:00">2019-09-17</time>
+              <time title="创建时间：2019-09-17 22:15:15" itemprop="dateCreated datePublished" datetime="2019-09-17T22:15:15+08:00">2019-09-17</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-22 22:46:36" itemprop="dateModified" datetime="2019-09-22T22:46:36+08:00">2019-09-22</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -763,6 +771,60 @@
 
 
 
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function() {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
   
 
   

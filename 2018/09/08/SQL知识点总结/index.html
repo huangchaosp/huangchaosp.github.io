@@ -329,6 +329,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column1, column2....columnN</span><br><span class="line"><span class="keyword">FROM</span>   table_name;</span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：SQL 不区分大小写</p>
 <p>假设有这样的一张表<code>products</code></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -359,6 +360,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="检索单个列"><a href="#检索单个列" class="headerlink" title="检索单个列"></a>检索单个列</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_name</span><br><span class="line"><span class="keyword">FROM</span> products</span><br></pre></td></tr></table></figure>
 <h3 id="检索所有列"><a href="#检索所有列" class="headerlink" title="检索所有列"></a>检索所有列</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> products</span><br></pre></td></tr></table></figure>
 <h3 id="从表中选取前10行"><a href="#从表中选取前10行" class="headerlink" title="从表中选取前10行"></a>从表中选取前10行</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">LIMIT</span> <span class="number">10</span></span><br></pre></td></tr></table></figure>
@@ -376,6 +378,7 @@
 <h3 id="NULL值（no-value）"><a href="#NULL值（no-value）" class="headerlink" title="NULL值（no value）"></a><code>NULL</code>值（no value）</h3><p>不包含值，它与字段包含0、空字符串或仅仅包含空格不同</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_name,prod_price</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">WHERE</span> prod_price <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="LIKE-操作符"><a href="#LIKE-操作符" class="headerlink" title="LIKE 操作符"></a>LIKE 操作符</h2><p>有一个<code>Persons</code> 表:</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -410,10 +413,12 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>例子  1</strong><br>现在，我们希望从上面的 “Persons” 表中选取居住在以 “N” 开始的城市里的人：<br>我们可以使用下面的 SELECT 语句：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Persons</span><br><span class="line"><span class="keyword">WHERE</span> City <span class="keyword">LIKE</span> <span class="string">'N%'</span></span><br></pre></td></tr></table></figure>
 <p><strong>提示</strong>：”%” 可用于定义通配符（模式中缺少的字母）。</p>
 <p><strong>结果集</strong>：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -434,9 +439,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>例子  2</strong><br>接下来，我们希望从 “Persons” 表中选取居住在包含 “lon” 的城市里的人：<br>我们可以使用下面的 SELECT 语句：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Persons</span><br><span class="line"><span class="keyword">WHERE</span> City <span class="keyword">LIKE</span> <span class="string">'%lon%’</span></span><br></pre></td></tr></table></figure>
 <p><strong>结果集</strong>：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -457,9 +464,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>例子  3</strong><br>通过使用 <code>NOT</code> 关键字，我们可以从 “Persons” 表中选取居住在不包含 “lon” 的城市里的人：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Persons</span><br><span class="line"><span class="keyword">WHERE</span> City <span class="keyword">NOT</span> <span class="keyword">LIKE</span> <span class="string">'%lon%'</span></span><br></pre></td></tr></table></figure>
 <p><strong>结果集</strong>：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -487,6 +496,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h2 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a>逻辑操作符</h2><h3 id="操作符（operator）"><a href="#操作符（operator）" class="headerlink" title="操作符（operator）"></a>操作符（operator）</h3><p>  用来联结或改变WHERE子句中的子句的关键字，也称为逻辑操作符（logical operetor）</p>
 <h4 id="AND操作符"><a href="#AND操作符" class="headerlink" title="AND操作符"></a><code>AND</code>操作符</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_id,prod_price,prod_name</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">WHERE</span> vend_id=<span class="number">1003</span> <span class="keyword">and</span>  prod_price&lt;=<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 <h4 id="OR操作符"><a href="#OR操作符" class="headerlink" title="OR操作符"></a><code>OR</code>操作符</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> prod_id,prod_price,prod_name</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">WHERE</span> vend_id=<span class="number">1003</span> <span class="keyword">or</span> vend_id=<span class="number">1004</span>;</span><br></pre></td></tr></table></figure>
@@ -506,6 +516,7 @@
 <h2 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h2><p>我们经常需要汇总数据而不用把它们实际检索出来<br>聚集函数（aggregate function） 运行在行组上，计算和返回单个值的函数。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">AVG</span>(prod_price) <span class="keyword">AS</span> avg_price</span><br><span class="line"><span class="keyword">FROM</span> products;</span><br></pre></td></tr></table></figure>
 <p><strong>表：SQL聚集函数</strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -536,6 +547,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h2 id="分组数据-GROUP-BY"><a href="#分组数据-GROUP-BY" class="headerlink" title="分组数据-GROUP BY"></a>分组数据-GROUP BY</h2><p>分组允许把数据分为多个逻辑组，以便能对每个组进行聚集计算。</p>
 <p>分组是在 SELECT 语句的 GROUP BY 子句中建立的</p>
 <p>GROUP BY 子句可以包含任意数目的列</p>
@@ -544,6 +556,7 @@
 <p>GROUP BY 子句必须出现在 WHERE 子句之后， ORDER BY 子句之前。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> vend_id,<span class="keyword">COUNT</span>(*) <span class="keyword">AS</span> num_prods</span><br><span class="line"><span class="keyword">FROM</span> products</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> vend_id;</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -566,13 +579,15 @@
 </tr>
 </tbody>
 </table>
-<h2 id="分组数据–HAVING"><a href="#分组数据–HAVING" class="headerlink" title="分组数据–HAVING"></a>分组数据–HAVING</h2><p>HAVING 子句</p>
+</div>
+<h2 id="分组数据—HAVING"><a href="#分组数据—HAVING" class="headerlink" title="分组数据—HAVING"></a>分组数据—HAVING</h2><p>HAVING 子句</p>
 <p>HAVING 非常类似于 WHERE </p>
 <p>目前为止所学过的所有类型的 WHERE 子句都可以用 HAVING 来替代</p>
 <p>差别是WHERE 过滤行，而 HAVING 过滤分组</p>
 <p>WHERE 在数据分组前进行过滤， HAVING 在数据分组后进行过滤</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> cust_id,<span class="keyword">COUNT</span>(*) <span class="keyword">AS</span> orders</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> cust_id</span><br><span class="line"><span class="keyword">HAVING</span> <span class="keyword">COUNT</span>(*) &gt;= <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -587,7 +602,9 @@
 </tr>
 </tbody>
 </table>
-<h2 id="SELECT子句顺序"><a href="#SELECT子句顺序" class="headerlink" title="SELECT子句顺序"></a>SELECT子句顺序</h2><table>
+</div>
+<h2 id="SELECT子句顺序"><a href="#SELECT子句顺序" class="headerlink" title="SELECT子句顺序"></a>SELECT子句顺序</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">子句</th>
@@ -633,11 +650,13 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>可以把一条 SELECT语句返回的结果用于另一条 SELECT 语句的 WHERE 子句。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> cust_id</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> order_num <span class="keyword">IN</span> (<span class="keyword">SELECT</span> order_num</span><br><span class="line">					<span class="keyword">FROM</span> orderitems</span><br><span class="line">					<span class="keyword">WHERE</span> prod_id = <span class="string">'TNT2'</span>);</span><br></pre></td></tr></table></figure>
 <h2 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h2><p><strong>作用：</strong> 用于根据两个或多个表中的列之间的关系，从这些表中查询数据。</p>
 <h3 id="Join-和-Key"><a href="#Join-和-Key" class="headerlink" title="Join 和 Key"></a>Join 和 Key</h3><p>有时为了得到完整的结果，我们需要从两个或更多的表中获取结果。我们就需要执行 <code>join</code>。<br>数据库中的表可通过键将彼此联系起来。主键（<code>Primary Key</code>）是一个列（或多个列），在这个列中的每一行的值都是唯一的。在表中，每个主键的值都是唯一的。这样做的目的是在不重复每个表中的所有数据的情况下，把表间的数据交叉捆绑在一起。</p>
 <p>请看 “Persons” 表：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -672,8 +691,10 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>请注意，”Id_P” 列是 Persons 表中的的主键。这意味着没有两行能够拥有相同的 <code>Id_P</code>。即使两个人的姓名完全相同，<code>Id_P</code> 也可以区分他们。</p>
 <p>接下来请看 “Orders” 表：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -710,9 +731,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="引用两个表"><a href="#引用两个表" class="headerlink" title="引用两个表"></a>引用两个表</h3><p>我们可以通过引用两个表的方式，从两个表中获取数据：<br>谁订购了产品，并且他们订购了什么产品？</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Persons.LastName, Persons.FirstName, Orders.OrderNo</span><br><span class="line"><span class="keyword">FROM</span> Persons</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> Orders</span><br><span class="line"><span class="keyword">ON</span> Persons.Id_P = Orders.Id_P</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> Persons.LastName</span><br></pre></td></tr></table></figure>
 <p>结果集：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -744,6 +767,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="不同的-SQL-JOIN"><a href="#不同的-SQL-JOIN" class="headerlink" title="不同的 SQL JOIN"></a>不同的 SQL JOIN</h3><p>除了我们在上面的例子中使用的 INNER JOIN（内连接），我们还可以使用其他几种连接。<br>下面列出了您可以使用的 JOIN 类型，以及它们之间的差异。</p>
 <ol>
 <li>JOIN: 如果表中有至少一个匹配，则返回行</li>
@@ -762,6 +786,7 @@
 <h3 id="CASE搜索函数"><a href="#CASE搜索函数" class="headerlink" title="CASE搜索函数"></a><code>CASE</code>搜索函数</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CASE WHEN sex = '1' THEN '男' </span><br><span class="line">WHEN sex = '2' THEN '女' </span><br><span class="line">ELSE '其他' <span class="keyword">END</span></span><br></pre></td></tr></table></figure>
 <h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><p>已知数据按照另外一种方式进行分组</p>
 <p>有如下的表：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -808,9 +833,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>我们的需求是根据这个国家人口数据，统计亚洲和北美洲的人口数量：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span>  <span class="keyword">CASE</span> country</span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'中国'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'印度'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'日本'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'美国'</span>     <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'加拿大'</span>  <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'墨西哥'</span>  <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">ELSE</span> <span class="string">'其他'</span> <span class="keyword">END</span> <span class="keyword">AS</span> 洲</span><br><span class="line">，<span class="keyword">SUM</span>(population) <span class="keyword">AS</span> 人口</span><br><span class="line"><span class="keyword">FROM</span>    Table_A</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">CASE</span> country</span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'中国'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'印度'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'日本'</span>     <span class="keyword">THEN</span> <span class="string">'亚洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'美国'</span>     <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'加拿大'</span>  <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">'墨西哥'</span>  <span class="keyword">THEN</span> <span class="string">'北美洲'</span></span><br><span class="line"><span class="keyword">ELSE</span> <span class="string">'其他'</span> <span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
 <p>输出:</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -833,8 +860,10 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>通过<code>case when</code>我们还可以实现类似Excel中数据透视表的功能：</p>
 <p>假设我们有如下数据 ：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -886,7 +915,9 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>我们希望能按照国家和性别进行分组统计，计算每个国家的男女人口数量，得到如下结果： </p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -918,6 +949,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>我们可以通过以下语句来实现：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> country,</span><br><span class="line"><span class="keyword">SUM</span>( <span class="keyword">CASE</span> <span class="keyword">WHEN</span> sex = <span class="string">'1'</span> <span class="keyword">THEN</span></span><br><span class="line">population <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">AS</span> 男,  <span class="comment">--男性人口</span></span><br><span class="line"><span class="keyword">SUM</span>( <span class="keyword">CASE</span> <span class="keyword">WHEN</span> sex = <span class="string">'2'</span> <span class="keyword">THEN</span></span><br><span class="line">population <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)   <span class="keyword">AS</span> 女<span class="comment">--女性人口</span></span><br><span class="line"><span class="keyword">FROM</span>  Table_A</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> country;</span><br></pre></td></tr></table></figure>
 <h2 id="CREATE-TABLE"><a href="#CREATE-TABLE" class="headerlink" title="CREATE TABLE"></a>CREATE TABLE</h2><h3 id="创建空表"><a href="#创建空表" class="headerlink" title="创建空表"></a>创建空表</h3><p>如要创建一个列名分别是”Id_P”、”LastName”、”FirstName”、”Address” 以及 “City”的空表，表名为<code>Persons</code>：</p>
@@ -926,6 +958,7 @@
 <h2 id="EXTRACT-函数"><a href="#EXTRACT-函数" class="headerlink" title="EXTRACT() 函数"></a>EXTRACT() 函数</h2><h3 id="定义和用法"><a href="#定义和用法" class="headerlink" title="定义和用法"></a>定义和用法</h3><p><code>EXTRACT()</code>函数用于返回日期/时间的单独部分，比如年、月、日、小时、分钟等等。</p>
 <h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><code>EXTRACT(unit FROM date)</code></p>
 <p>假设我们有如下的表：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -942,6 +975,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>我们使用下面的 SELECT 语句：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">EXTRACT</span>(<span class="keyword">YEAR</span> <span class="keyword">FROM</span> OrderDate) <span class="keyword">AS</span> OrderYear,</span><br><span class="line"><span class="keyword">EXTRACT</span>(<span class="keyword">MONTH</span> <span class="keyword">FROM</span> OrderDate) <span class="keyword">AS</span> OrderMonth,</span><br><span class="line"><span class="keyword">EXTRACT</span>(<span class="keyword">DAY</span> <span class="keyword">FROM</span> OrderDate) <span class="keyword">AS</span> OrderDay</span><br><span class="line"><span class="keyword">FROM</span> Orders</span><br><span class="line"><span class="keyword">WHERE</span> OrderId=<span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p><strong>完</strong></p>
@@ -1165,7 +1199,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL简介"><span class="nav-number">1.</span> <span class="nav-text">SQL简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是数据库（database）"><span class="nav-number">1.1.</span> <span class="nav-text">什么是数据库（database）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SQL"><span class="nav-number">1.2.</span> <span class="nav-text">什么是SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语言分4类："><span class="nav-number">1.3.</span> <span class="nav-text">SQL语言分4类：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">2.</span> <span class="nav-text">基本语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#检索单个列"><span class="nav-number">2.1.</span> <span class="nav-text">检索单个列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检索所有列"><span class="nav-number">2.2.</span> <span class="nav-text">检索所有列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从表中选取前10行"><span class="nav-number">2.3.</span> <span class="nav-text">从表中选取前10行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语法-子句"><span class="nav-number">2.4.</span> <span class="nav-text">SQL语法-子句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序-ORDER-BY"><span class="nav-number">3.</span> <span class="nav-text">排序-ORDER BY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选取不重复的数据-DISTINCT"><span class="nav-number">4.</span> <span class="nav-text">选取不重复的数据-DISTINCT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHERE子句"><span class="nav-number">5.</span> <span class="nav-text">WHERE子句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的WHERE子句操作符"><span class="nav-number">5.1.</span> <span class="nav-text">常见的WHERE子句操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NULL值（no-value）"><span class="nav-number">5.2.</span> <span class="nav-text">NULL值（no value）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIKE-操作符"><span class="nav-number">6.</span> <span class="nav-text">LIKE 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑操作符"><span class="nav-number">7.</span> <span class="nav-text">逻辑操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作符（operator）"><span class="nav-number">7.1.</span> <span class="nav-text">操作符（operator）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AND操作符"><span class="nav-number">7.1.1.</span> <span class="nav-text">AND操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OR操作符"><span class="nav-number">7.1.2.</span> <span class="nav-text">OR操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IN操作符"><span class="nav-number">7.1.3.</span> <span class="nav-text">IN操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NOT操作符"><span class="nav-number">7.1.4.</span> <span class="nav-text">NOT操作符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算字段"><span class="nav-number">8.</span> <span class="nav-text">计算字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Alias（别名）"><span class="nav-number">9.</span> <span class="nav-text">Alias（别名）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#汇总数据"><span class="nav-number">10.</span> <span class="nav-text">汇总数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组数据-GROUP-BY"><span class="nav-number">11.</span> <span class="nav-text">分组数据-GROUP BY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组数据–HAVING"><span class="nav-number">12.</span> <span class="nav-text">分组数据–HAVING</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELECT子句顺序"><span class="nav-number">13.</span> <span class="nav-text">SELECT子句顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子查询"><span class="nav-number">14.</span> <span class="nav-text">子查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JOIN"><span class="nav-number">15.</span> <span class="nav-text">JOIN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Join-和-Key"><span class="nav-number">15.1.</span> <span class="nav-text">Join 和 Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用两个表"><span class="nav-number">15.2.</span> <span class="nav-text">引用两个表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同的-SQL-JOIN"><span class="nav-number">15.3.</span> <span class="nav-text">不同的 SQL JOIN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNION"><span class="nav-number">16.</span> <span class="nav-text">UNION</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-语法"><span class="nav-number">16.1.</span> <span class="nav-text">UNION 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-ALL-语法"><span class="nav-number">16.2.</span> <span class="nav-text">UNION ALL 语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CASE-WHEN"><span class="nav-number">17.</span> <span class="nav-text">CASE WHEN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单CASE-函数"><span class="nav-number">17.1.</span> <span class="nav-text">简单CASE 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE搜索函数"><span class="nav-number">17.2.</span> <span class="nav-text">CASE搜索函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例"><span class="nav-number">17.3.</span> <span class="nav-text">使用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CREATE-TABLE"><span class="nav-number">18.</span> <span class="nav-text">CREATE TABLE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建空表"><span class="nav-number">18.1.</span> <span class="nav-text">创建空表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT的结果集来创建表"><span class="nav-number">18.2.</span> <span class="nav-text">SELECT的结果集来创建表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXTRACT-函数"><span class="nav-number">19.</span> <span class="nav-text">EXTRACT() 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义和用法"><span class="nav-number">19.1.</span> <span class="nav-text">定义和用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">19.2.</span> <span class="nav-text">语法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL简介"><span class="nav-number">1.</span> <span class="nav-text">SQL简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是数据库（database）"><span class="nav-number">1.1.</span> <span class="nav-text">什么是数据库（database）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SQL"><span class="nav-number">1.2.</span> <span class="nav-text">什么是SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语言分4类："><span class="nav-number">1.3.</span> <span class="nav-text">SQL语言分4类：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">2.</span> <span class="nav-text">基本语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#检索单个列"><span class="nav-number">2.1.</span> <span class="nav-text">检索单个列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检索所有列"><span class="nav-number">2.2.</span> <span class="nav-text">检索所有列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从表中选取前10行"><span class="nav-number">2.3.</span> <span class="nav-text">从表中选取前10行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语法-子句"><span class="nav-number">2.4.</span> <span class="nav-text">SQL语法-子句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序-ORDER-BY"><span class="nav-number">3.</span> <span class="nav-text">排序-ORDER BY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选取不重复的数据-DISTINCT"><span class="nav-number">4.</span> <span class="nav-text">选取不重复的数据-DISTINCT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHERE子句"><span class="nav-number">5.</span> <span class="nav-text">WHERE子句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的WHERE子句操作符"><span class="nav-number">5.1.</span> <span class="nav-text">常见的WHERE子句操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NULL值（no-value）"><span class="nav-number">5.2.</span> <span class="nav-text">NULL值（no value）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIKE-操作符"><span class="nav-number">6.</span> <span class="nav-text">LIKE 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑操作符"><span class="nav-number">7.</span> <span class="nav-text">逻辑操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作符（operator）"><span class="nav-number">7.1.</span> <span class="nav-text">操作符（operator）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AND操作符"><span class="nav-number">7.1.1.</span> <span class="nav-text">AND操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OR操作符"><span class="nav-number">7.1.2.</span> <span class="nav-text">OR操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IN操作符"><span class="nav-number">7.1.3.</span> <span class="nav-text">IN操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NOT操作符"><span class="nav-number">7.1.4.</span> <span class="nav-text">NOT操作符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算字段"><span class="nav-number">8.</span> <span class="nav-text">计算字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Alias（别名）"><span class="nav-number">9.</span> <span class="nav-text">Alias（别名）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#汇总数据"><span class="nav-number">10.</span> <span class="nav-text">汇总数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组数据-GROUP-BY"><span class="nav-number">11.</span> <span class="nav-text">分组数据-GROUP BY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组数据—HAVING"><span class="nav-number">12.</span> <span class="nav-text">分组数据—HAVING</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELECT子句顺序"><span class="nav-number">13.</span> <span class="nav-text">SELECT子句顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子查询"><span class="nav-number">14.</span> <span class="nav-text">子查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JOIN"><span class="nav-number">15.</span> <span class="nav-text">JOIN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Join-和-Key"><span class="nav-number">15.1.</span> <span class="nav-text">Join 和 Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用两个表"><span class="nav-number">15.2.</span> <span class="nav-text">引用两个表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同的-SQL-JOIN"><span class="nav-number">15.3.</span> <span class="nav-text">不同的 SQL JOIN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNION"><span class="nav-number">16.</span> <span class="nav-text">UNION</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-语法"><span class="nav-number">16.1.</span> <span class="nav-text">UNION 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-ALL-语法"><span class="nav-number">16.2.</span> <span class="nav-text">UNION ALL 语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CASE-WHEN"><span class="nav-number">17.</span> <span class="nav-text">CASE WHEN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单CASE-函数"><span class="nav-number">17.1.</span> <span class="nav-text">简单CASE 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE搜索函数"><span class="nav-number">17.2.</span> <span class="nav-text">CASE搜索函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例"><span class="nav-number">17.3.</span> <span class="nav-text">使用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CREATE-TABLE"><span class="nav-number">18.</span> <span class="nav-text">CREATE TABLE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建空表"><span class="nav-number">18.1.</span> <span class="nav-text">创建空表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT的结果集来创建表"><span class="nav-number">18.2.</span> <span class="nav-text">SELECT的结果集来创建表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXTRACT-函数"><span class="nav-number">19.</span> <span class="nav-text">EXTRACT() 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义和用法"><span class="nav-number">19.1.</span> <span class="nav-text">定义和用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">19.2.</span> <span class="nav-text">语法</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1389,6 +1423,8 @@
 
 
 
+
+  
 
   
 

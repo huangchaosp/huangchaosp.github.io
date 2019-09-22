@@ -389,6 +389,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diamonds=pd.read_csv(<span class="string">'https://raw.githubusercontent.com/huangchaosp/hc-blog-attachment/master/data/diamonds.csv'</span>)</span><br></pre></td></tr></table></figure>
 <p>通过head() 和 shape 查看数据的结构</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diamonds.head()</span><br></pre></td></tr></table></figure>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -473,6 +474,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diamonds.shape</span><br></pre></td></tr></table></figure>
 <pre><code>(53940, 10)
 </code></pre><p>使用sample() 随机抽取样本数据</p>
@@ -503,6 +505,7 @@
 <h3 id="饼图"><a href="#饼图" class="headerlink" title="饼图"></a>饼图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The slices will be ordered and plotted counter-clockwise.</span></span><br><span class="line">labels = <span class="string">'Frogs'</span>, <span class="string">'Hogs'</span>, <span class="string">'Dogs'</span>, <span class="string">'Logs'</span> <span class="comment"># 定义标签</span></span><br><span class="line">sizes = [<span class="number">15</span>, <span class="number">30</span>, <span class="number">45</span>, <span class="number">10</span>] <span class="comment"># 每一块的比例</span></span><br><span class="line">colors = [<span class="string">'yellowgreen'</span>, <span class="string">'gold'</span>, <span class="string">'lightskyblue'</span>, <span class="string">'lightcoral'</span>] <span class="comment"># 每一块的颜色</span></span><br><span class="line">explode = (<span class="number">0</span>, <span class="number">0.1</span>, <span class="number">0</span>, <span class="number">0</span>) <span class="comment"># 突出显示，这里仅仅突出显示第二块（即 'Hogs' ）</span></span><br><span class="line">plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=<span class="string">'%1.1f%%'</span>,</span><br><span class="line">shadow=<span class="keyword">True</span>, startangle=<span class="number">90</span>)</span><br><span class="line">plt.axis(<span class="string">'equal'</span>) <span class="comment"># 显示为圆（避免比例压缩为椭圆）</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190319220210.png" alt></p>
 <h3 id="热力图"><a href="#热力图" class="headerlink" title="热力图"></a>热力图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">flights = sns.load_dataset(<span class="string">'flights'</span>)</span><br><span class="line">flights.head()</span><br></pre></td></tr></table></figure>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -545,7 +548,9 @@
 </tr>
 </tbody>
 </table>
+</div>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pivot() 可以将dataframe转换为行列式矩阵 并指定每个元素的存储值</span></span><br><span class="line">flights = flights.pivot(index=<span class="string">'month'</span>, columns=<span class="string">'year'</span>,  values=<span class="string">'passengers'</span>)</span><br><span class="line">flights.head()</span><br></pre></td></tr></table></figure>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -657,6 +662,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">6</span>))</span><br><span class="line">sns.heatmap(flights, fmt=<span class="string">'d'</span>, linewidths=<span class="number">.5</span>)</span><br><span class="line"><span class="comment"># fmt设置字体模式  linewidth设置每个小方格的间距 线宽</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190319220224.png" alt></p>
 
@@ -1118,6 +1124,8 @@
 
 
 
+
+  
 
   
 

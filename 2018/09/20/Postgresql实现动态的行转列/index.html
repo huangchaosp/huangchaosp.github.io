@@ -55,18 +55,18 @@
   };
 </script>
 
-  <meta name="description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：   姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94   我们想要得到像这样的一张表：   姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
+  <meta name="description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
 <meta name="keywords" content="SQL,Postgresql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Postgresql实现动态的行转列">
 <meta property="og:url" content="https://huangchaosp.github.io/2018/09/20/Postgresql实现动态的行转列/index.html">
 <meta property="og:site_name" content="Huang Chao&#39;s Blog">
-<meta property="og:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：   姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94   我们想要得到像这样的一张表：   姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
+<meta property="og:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-08-11T05:42:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Postgresql实现动态的行转列">
-<meta name="twitter:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：   姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94   我们想要得到像这样的一张表：   姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
+<meta name="twitter:description" content="问题在数据处理中，常遇到行转列的问题，比如有如下的问题：有这样的一张表“Student_score”表：    姓名 课程 分数     张三 数学 83   张三 物理 93   张三 语文 80   李四 语文 74   李四 数学 84   李四 物理 94    我们想要得到像这样的一张表：    姓名 数学 物理 语文     李四 84 94 74   张三 83 93 80">
   <link rel="canonical" href="https://huangchaosp.github.io/2018/09/20/Postgresql实现动态的行转列/">
 
 
@@ -295,7 +295,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>3.7k</span>
+              <span>3.8k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -318,7 +318,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在数据处理中，常遇到行转列的问题，比如有如下的问题：<br>有这样的一张表<br><strong>“Student_score”表：</strong></p><table>
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在数据处理中，常遇到行转列的问题，比如有如下的问题：<br>有这样的一张表<br><strong>“Student_score”表：</strong></p><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>姓名</th>
@@ -358,7 +359,9 @@
 <td>94</td>
 </tr>
 </tbody>
-</table><p>我们想要得到像这样的一张表：</p><table>
+</table>
+</div><p>我们想要得到像这样的一张表：</p><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>姓名</th>
@@ -381,13 +384,15 @@
 <td>80</td>
 </tr>
 </tbody>
-</table><a id="more"></a>
+</table>
+</div><a id="more"></a>
 
 
 
 <p>当数据量比较少时，我们可以在<code>Excel</code>中使用数据透视表<code>pivot table</code>的功能实现这个需求，但当数据量较大，或者我们还需要在数据库中进行后续的数据处理时，使用数据透视表就显得不那么高效。<br>下面，介绍如何在<code>Postgresql</code>中实现数据的行转列。</p>
 <h2 id="静态写法"><a href="#静态写法" class="headerlink" title="静态写法"></a>静态写法</h2><p>当我们要转换的值字段是<strong>数值型</strong>时，我们可以用<code>SUM()</code>函数：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> Student_score(姓名 <span class="built_in">varchar</span>, 课程 <span class="built_in">varchar</span>, 分数 <span class="built_in">int</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'数学'</span>,<span class="number">83</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'物理'</span>,<span class="number">93</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'语文'</span>,<span class="number">80</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'语文'</span>,<span class="number">74</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'数学'</span>,<span class="number">84</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_score <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'物理'</span>,<span class="number">94</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> 姓名</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 数学</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'物理'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 物理</span><br><span class="line">    ,<span class="keyword">sum</span>(<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> 分数 <span class="keyword">end</span>) <span class="keyword">as</span> 语文</span><br><span class="line"><span class="keyword">from</span> Student_score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>当我们要转换的值字段是<strong>字符型</strong>时，比如我们的表是这样的：<br><strong>“Student_grade”表：</strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -412,6 +417,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>我们可以用<code>string_agg()</code>函数：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> Student_grade(姓名 <span class="built_in">varchar</span>, 课程 <span class="built_in">varchar</span>, 等级 <span class="built_in">varchar</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'数学'</span>,<span class="string">'优'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'物理'</span>,<span class="string">'良'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'张三'</span>,<span class="string">'语文'</span>,<span class="string">'及格'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'语文'</span>,<span class="string">'及格'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'数学'</span>,<span class="string">'良'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Student_grade <span class="keyword">VALUES</span>(<span class="string">'李四'</span>,<span class="string">'物理'</span>,<span class="string">'优'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> 姓名</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'数学'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 数学</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'物理'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 物理</span><br><span class="line">    ,string_agg((<span class="keyword">case</span> 课程 <span class="keyword">when</span> <span class="string">'语文'</span> <span class="keyword">then</span> 等级 <span class="keyword">end</span>),<span class="string">''</span>) <span class="keyword">as</span> 语文</span><br><span class="line"><span class="keyword">from</span> Student_grade</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><p><code>Postgresql</code>内置了<a href="https://www.postgresql.org/docs/9.2/static/tablefunc.html" target="_blank" rel="noopener">tablefunc</a>可实现<code>pivot table</code>的功能。<br>语法：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> crosstab(</span><br><span class="line">  <span class="string">'select row_name,cat,value</span></span><br><span class="line"><span class="string">   from table</span></span><br><span class="line"><span class="string">   order by 1,2'</span>)</span><br><span class="line"><span class="keyword">AS</span> (row_name <span class="keyword">type</span>, category_1 <span class="keyword">type</span>, category_2 <span class="keyword">type</span>, category_3 <span class="keyword">type</span>, ...);</span><br></pre></td></tr></table></figure></p>
 <p>例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> crosstab(</span><br><span class="line">  <span class="string">'select 姓名,课程,分数</span></span><br><span class="line"><span class="string">   from Student_score</span></span><br><span class="line"><span class="string">   order by 1,2'</span>)</span><br><span class="line"><span class="keyword">AS</span> (姓名 <span class="built_in">varchar</span>, 数学 <span class="built_in">int</span>, 物理 <span class="built_in">int</span>, 语文 <span class="built_in">int</span>);</span><br></pre></td></tr></table></figure></p>
@@ -884,6 +890,8 @@
 
 
 
+
+  
 
   
 
