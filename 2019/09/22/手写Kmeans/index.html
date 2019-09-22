@@ -55,19 +55,24 @@
   };
 </script>
 
-  <meta name="description" content="传统的数据结构与算法中的算法一般定义是$^{1}$： 非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。 我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。">
-<meta name="keywords" content="机器学习,算法">
+  <meta name="description" content="kmeans.py 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990&quot;&quot;&quot;手写kmeans&quot;&quot;&quot;impo">
+<meta name="keywords" content="机器学习,kmeans,练习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="试谈传统算法与机器学习算法">
-<meta property="og:url" content="https://huangchaosp.github.io/2019/09/17/试谈传统算法与机器学习算法/index.html">
+<meta property="og:title" content="手写Kmeans">
+<meta property="og:url" content="https://huangchaosp.github.io/2019/09/22/手写Kmeans/index.html">
 <meta property="og:site_name" content="Huang Chao&#39;s Blog">
-<meta property="og:description" content="传统的数据结构与算法中的算法一般定义是$^{1}$： 非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。 我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。">
+<meta property="og:description" content="kmeans.py 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990&quot;&quot;&quot;手写kmeans&quot;&quot;&quot;impo">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-17T14:34:36.944Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173505.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173506.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173504.png">
+<meta property="og:updated_time" content="2019-09-22T09:39:11.325Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="试谈传统算法与机器学习算法">
-<meta name="twitter:description" content="传统的数据结构与算法中的算法一般定义是$^{1}$： 非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。 我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。">
-  <link rel="canonical" href="https://huangchaosp.github.io/2019/09/17/试谈传统算法与机器学习算法/">
+<meta name="twitter:title" content="手写Kmeans">
+<meta name="twitter:description" content="kmeans.py 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990&quot;&quot;&quot;手写kmeans&quot;&quot;&quot;impo">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173505.png">
+  <link rel="canonical" href="https://huangchaosp.github.io/2019/09/22/手写Kmeans/">
 
 
 <script id="page-configurations">
@@ -81,7 +86,7 @@
   };
 </script>
 
-  <title>试谈传统算法与机器学习算法 | Huang Chao's Blog</title>
+  <title>手写Kmeans | Huang Chao's Blog</title>
   
 
 
@@ -218,7 +223,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://huangchaosp.github.io/2019/09/17/试谈传统算法与机器学习算法/">
+    <link itemprop="mainEntityOfPage" href="https://huangchaosp.github.io/2019/09/22/手写Kmeans/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Huang Chao">
@@ -232,7 +237,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">试谈传统算法与机器学习算法
+          <h1 class="post-title" itemprop="name headline">手写Kmeans
 
             
           </h1>
@@ -249,7 +254,7 @@
                 
               
 
-              <time title="创建时间：2019-09-17 22:15:15 / 修改时间：22:34:36" itemprop="dateCreated datePublished" datetime="2019-09-17T22:15:15+08:00">2019-09-17</time>
+              <time title="创建时间：2019-09-22 17:39:30 / 修改时间：17:39:11" itemprop="dateCreated datePublished" datetime="2019-09-22T17:39:30+08:00">2019-09-22</time>
             </span>
           
             
@@ -271,7 +276,7 @@
           
 
           
-            <span id="/2019/09/17/试谈传统算法与机器学习算法/" class="post-meta-item leancloud_visitors" data-flag-title="试谈传统算法与机器学习算法" title="阅读次数">
+            <span id="/2019/09/22/手写Kmeans/" class="post-meta-item leancloud_visitors" data-flag-title="手写Kmeans" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -287,7 +292,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>987</span>
+              <span>2.3k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -297,7 +302,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
           
 
@@ -310,25 +315,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>传统的<code>数据结构与算法</code>中的算法一般定义是$^{1}$：</p><blockquote>
-<p>非形式地说，算法（algorithm）就是任何良定义的计算过程，该过程取某个值或值的集合作为输入并产生某个值或值的集合作为输出。这样算法就是把输入转换成输出的计算步骤的一个序列。</p>
-<p>我们也可以把算法看成是用于求解良说明的计算问题的工具。一般来说，问题陈述说明了期望的输入/输出关系。算法则描述一个特定的计算过程来实现该输入/输出关系。</p>
-</blockquote><a id="more"></a>
+        <blockquote>
+<p>kmeans.py</p>
+</blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">手写kmeans</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_blobs</span><br><span class="line"><span class="keyword">import</span> typing</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">KMeans</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, k: int)</span>:</span></span><br><span class="line">        self.k = k</span><br><span class="line">        self._centers = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, nda: np.ndarray, n_iters=<span class="number">10</span>, callback: typing.Callable = None)</span>:</span></span><br><span class="line">        n_features = nda.shape[<span class="number">1</span>]</span><br><span class="line">        centers = self.random_centers(self.k, n_features)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_iters):</span><br><span class="line">            labels = self.assign(centers, nda)</span><br><span class="line">            centers = self.update(nda, labels, self.k)</span><br><span class="line">            <span class="keyword">if</span> callback:</span><br><span class="line">                callback(nda, labels, i)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, nda: np.ndarray)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.assign(self.centers, nda)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">centers</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._centers:</span><br><span class="line">            <span class="keyword">raise</span> AttributeError(<span class="string">"Call 'fit' before reference to centers."</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">random_centers</span><span class="params">(k, n_features)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> np.random.random((k, n_features))</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">assign</span><span class="params">(centers, nda)</span>:</span></span><br><span class="line">        n = nda.shape[<span class="number">0</span>]</span><br><span class="line">        labels = np.empty(n)</span><br><span class="line">        <span class="keyword">for</span> i, arr <span class="keyword">in</span> enumerate(nda):</span><br><span class="line">            labels[i] = KMeans.nearest_center(centers, arr)</span><br><span class="line">        <span class="keyword">return</span> labels</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(nda, labels, k)</span>:</span></span><br><span class="line">        centers = np.empty(k)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(k):</span><br><span class="line">            center = KMeans.cal_center(nda, labels, i)</span><br><span class="line">            centers[i] = center</span><br><span class="line">        <span class="keyword">return</span> centers</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">distance</span><span class="params">(arr1, arr2)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> np.sum((arr1 - arr2) ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cal_center</span><span class="params">(nda, labels, i)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> np.mean(nda[labels == i])</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nearest_center</span><span class="params">(centers, nda)</span>:</span></span><br><span class="line">        j = <span class="number">-1</span></span><br><span class="line">        min_dis = np.PINF</span><br><span class="line">        <span class="keyword">for</span> i, center <span class="keyword">in</span> enumerate(centers):</span><br><span class="line">            dis = KMeans.distance(center, nda)</span><br><span class="line">            <span class="keyword">if</span> dis &lt; min_dis:</span><br><span class="line">                min_dis = dis</span><br><span class="line">                j = i</span><br><span class="line">        <span class="keyword">return</span> j</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_plot</span><span class="params">(nda, labels, i)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        plt.scatter(nda[:, <span class="number">0</span>], nda[:, <span class="number">1</span>], c=labels)</span><br><span class="line">        plt.title(<span class="string">"i = %s"</span> % i)</span><br><span class="line">        plt.savefig(<span class="string">"%s.png"</span> % i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    X, y = make_blobs(n_samples=<span class="number">1000</span>, n_features=<span class="number">2</span>, centers=[[<span class="number">-1</span>, <span class="number">-1</span>], [<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">2</span>]],</span><br><span class="line">                      cluster_std=[<span class="number">0.4</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>],</span><br><span class="line">                      random_state=<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">    kmeans = KMeans(<span class="number">4</span>)</span><br><span class="line">    kmeans.fit(X, n_iters=<span class="number">40</span>, callback=my_plot)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure><a id="more"></a>
 
-<p>简单来说，算法就是能实现期望的输入到输出的计算过程。从这个角度讲，机器学习也是一种算法，它的输入是一组数据（称为训练数据），输出是在另一组数据上（称为测试数据）表现最好或较好的一个算法（或者叫模型），所以可以认为机器学习是输出算法的算法。</p>
-<p>理论上，最理想的当然是在所有可能的算法（模型）中找到一个在未见数据上表现最好的模型。但实际往往难以实现。退而求其次，人们尝试能不能在一个相对确定的一类模型中，找到一个”好模型“。因此，实际上机器学习算法的作用就是，在给定训练数据的前提下，找到某类模型的最佳参数。</p>
-<p>这里自然地得到了机器学习中的三要素$^{2}$，即</p>
-<ol>
-<li>模型：在哪类模型中进行最佳参数的求解。比如是线性模型、树模型还是神经网络模型等。</li>
-<li>策略：即目标函数，也称为损失函数。学习最佳参数的目标是什么，是平方损失、绝对损失还是交叉熵损失，是经验风险最小化还是结构风险最小化，正则项是L1还是L2，正则项系数是多少等等？</li>
-<li>算法：使用什么样的算法来优化参数。当模型空间和策略确定后，机器学习问题就转化为最优化问题了，那用什么方法来优化呢。是批梯度下降，随机梯度下降，还是牛顿法？</li>
-</ol>
-<p>在通过三要素得到一个机器学习模型后，需要确定得到的是否是一个“好模型”，通常的作法是：在未参与训练的数据上应用模型，得到预测结果后，使用某一个或某几个指标评价，这里的未参与训练的数据就是<code>测试数据</code>，指标就是所谓的<code>模型评估指标</code>。常用的评估指标有误差率、准确率、查全率、ROC、平方误差等。</p>
-<p>参考资料</p>
-<ol>
-<li>李航. 统计学习方法[M]. 2012.</li>
-<li>Thomas H.Cormen Charles E.Leiserson Ronald L.Rivest Clifford Stein 殷建平 徐云 王刚 刘晓光 苏明 邹恒明 王宏志. 算法导论（原书第3版）[J]. 计算机教育, 2013(10):51-51.</li>
-</ol>
+<p>运行结果：</p>
+<p><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173505.png" alt><br><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173506.png" alt><br><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173503.png" alt><br><img src="https://raw.githubusercontent.com/huangchaosp/imgfile/master/20190922173504.png" alt></p>
 
     </div>
 
@@ -368,7 +360,7 @@
     <strong>本文作者： </strong>Huang Chao</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://huangchaosp.github.io/2019/09/17/试谈传统算法与机器学习算法/" title="试谈传统算法与机器学习算法">https://huangchaosp.github.io/2019/09/17/试谈传统算法与机器学习算法/</a>
+    <a href="https://huangchaosp.github.io/2019/09/22/手写Kmeans/" title="手写Kmeans">https://huangchaosp.github.io/2019/09/22/手写Kmeans/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -385,7 +377,9 @@
             
               <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
             
-              <a href="/tags/算法/" rel="tag"># 算法</a>
+              <a href="/tags/kmeans/" rel="tag"># kmeans</a>
+            
+              <a href="/tags/练习/" rel="tag"># 练习</a>
             
           </div>
         
@@ -395,8 +389,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/08/10/linux安装python3/" rel="next" title="Linux安装python3">
-                  <i class="fa fa-chevron-left"></i> Linux安装python3
+                <a href="/2019/09/20/软件设计原则小记/" rel="next" title="软件设计原则小记">
+                  <i class="fa fa-chevron-left"></i> 软件设计原则小记
                 </a>
               
             </div>
@@ -404,10 +398,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/09/20/软件设计原则小记/" rel="prev" title="软件设计原则小记">
-                  软件设计原则小记 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -786,7 +776,7 @@
       repo: 'blog_comments',
       owner: 'huangchaosp',
       admin: ['huangchaosp'],
-      id: '2d95aad05fe7be73cdb5ad754e4b1b04',
+      id: '8106e92b9635e2474cc55e44835ba6fa',
         language: window.navigator.language || window.navigator.userLanguage,
       
       distractionFreeMode: 'true'
